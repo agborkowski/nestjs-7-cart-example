@@ -16,7 +16,7 @@ describe('Given CartsService', () => {
     expect(service).toBeDefined();
   });
 
-  it('Should return a example cart array', () => {
+  it('findAll method Should return carts array', () => {
     expect(service.findAll()).toEqual([{
       id: 'a',
       items: [{
@@ -28,5 +28,18 @@ describe('Given CartsService', () => {
       }]
 
     }])
+
+    it('checkout method Should calculate for the products in the cart', () => {
+      expect(service.checkout('a')).toEqual({
+        id: 'a',
+        items: [{
+          id: 'aa',
+          name: 'test',
+          price: 100.32,
+          quantity: 2,
+          total: 200.64,
+          description: 'test cart item'
+        }]
+      })
+    });
   });
-});
