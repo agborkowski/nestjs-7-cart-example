@@ -1,21 +1,5 @@
 import { Injectable } from '@nestjs/common';
-
-// @todo exclude bellow to file, fill full cart object, consider union interface for cart checkout
-interface CartItem {
-    id: string
-    name: string
-    price: number
-    quantity: number
-    description: string
-}
-interface CartItemCheckout extends CartItem {
-    total: number
-}
-
-interface Cart {
-    id: string
-    items: CartItem[] | CartItemCheckout[]
-}
+import { Cart, CartItem, CartItemCheckout } from './cart.interface';
 
 @Injectable()
 export class CartsService {
