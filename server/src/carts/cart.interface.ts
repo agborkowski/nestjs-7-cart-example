@@ -6,11 +6,11 @@ export interface CartItem {
     readonly description: string
 }
 
-export interface CartItemCheckout extends CartItem {
-    readonly total: number
-}
-
 export interface Cart {
     readonly id: string
-    readonly items: CartItem[] | CartItemCheckout[]
+    readonly items: CartItem[]
+}
+
+export interface CartCheckout extends Cart {
+    readonly total: number
 }
