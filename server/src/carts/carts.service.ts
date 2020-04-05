@@ -1,5 +1,12 @@
-import { Injectable } from '@nestjs/common';
-import { Cart, CartItem } from './cart.interface';
+import { Injectable, OnModuleInit, HttpService } from '@nestjs/common';
+import { Cart, CartCheckout, CartItem } from './cart.interface';
+//import { AxiosResponse } from 'axios';
+
+interface ExchangeRates {
+    rates: object
+    date: Date
+    timestamp?: number
+}
 
 @Injectable()
 export class CartsService {
@@ -15,8 +22,15 @@ export class CartsService {
 
     }];
 
+    private readonly baseCurrency = 'EUR';
+
+    private exchangeRates: ExchangeRates;
+
+    constructor(private httpService: HttpService) { }
+
     create(cart: Cart): boolean {
-        this.carts.push(cart);
+        const newCart = { ...cart };
+        this.carts.push(newCart);
         return true;
     }
 
@@ -50,12 +64,44 @@ export class CartsService {
         return false;
     }
 
-    checkout(cartId: string): Cart | boolean {
+    async checkout(cartId: string, currency: string = this.baseCurrency): Promise<CartCheckout | boolean> {
         const cart = this.find(cartId);
+        let currencyRate = await this.checkExchangeRates(new Date(), currency);
+
         if (cart) {
-            cart.total = cart.items.reduce((sum, cartItem: CartItem) => sum + (cartItem.price * cartItem.quantity), 0)
+            cart.total = cart.items.reduce(
+                (sum, cartItem: CartItem) =>
+                    (sum + (cartItem.price * cartItem.quantity)) * currencyRate
+                , 0)
+
             return cart;
         }
         return false;
+    }
+
+    public async checkExchangeRates(date: Date = new Date(), currency = ''): Promise<number> {
+        const checkDate = date.setHours(0, 0, 0, 0);
+        let currencyRate = 1;
+
+        const isExchangeRatesCached = (
+            this.exchangeRates?.rates &&
+            (checkDate === this.exchangeRates?.timestamp)
+        );
+
+        if (currency !== this.baseCurrency) {
+            if (isExchangeRatesCached) {
+                return this.exchangeRates['rates'][currency];
+            }
+            this.exchangeRates = {
+                ...await (await this.httpService.get('https://api.exchangeratesapi.io/latest').toPromise()).data as ExchangeRates,
+                timestamp: checkDate
+            }
+            return this.exchangeRates['rates'][currency];
+        }
+        return currencyRate;
+    }
+
+    public getExchangeRates() {
+        return this.exchangeRates;
     }
 }
