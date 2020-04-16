@@ -10,7 +10,7 @@ interface ExchangeRates {
 
 @Injectable()
 export class CartsService {
-    private readonly carts: Cart[] = [{
+    private carts: Cart[] = [{
         id: 'a',
         items: [{
             id: 'aa',
@@ -29,8 +29,7 @@ export class CartsService {
     constructor(private httpService: HttpService) { }
 
     create(cart: Cart): boolean {
-        const newCart = { ...cart };
-        this.carts.push(newCart);
+        this.carts.push(cart);
         return true;
     }
 
@@ -45,7 +44,8 @@ export class CartsService {
     itemAddToCart(item: CartItem, cartId: string): Cart | boolean {
         const cart = this.find(cartId);
         if (cart) {
-            return (cart.items.push(item) > 0)
+            cart.items.push(item);
+            return true;
         }
         return false;
 

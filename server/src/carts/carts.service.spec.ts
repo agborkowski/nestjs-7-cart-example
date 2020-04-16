@@ -47,14 +47,16 @@ describe('Given `CartsService`', () => {
 
   const cartId: string = cartB.id;
 
-  it('`create` method with given `bCart` should return 2 carts', () => {
-    service.create(cartB);
+  it('`create` method with given `cartB` should return 2 carts', () => {
+    service.create(JSON.parse(JSON.stringify(cartB)));
     expect(service.findAll().length).toEqual(2);
     expect(service.findAll()).toEqual([cartA, cartB]);
   })
 
   it('`find` method with given cart id should return that cart', () => {
-    expect(service.find(cartId)).toEqual(cartB)
+    expect(service.find(cartId)).toEqual(cartB);
+    expect(service.find(cartId) === cartB).toEqual(false); // is there side effect
+    expect(service.find(cartId).items === cartB.items).toEqual(false); // is there side effect
   })
 
   const itemAddToCart: CartItem = {
@@ -67,7 +69,8 @@ describe('Given `CartsService`', () => {
 
   it('`itemAddToCart` method should add item to exists `b` cart', () => {
     const itemAddedToCart = service.itemAddToCart(itemAddToCart, cartId);
-    expect(cartB.items.length).toEqual(1); // prevent mutation test
+    expect(service.find(cartId) === cartB).toEqual(false); // is there side effect
+    expect(cartB.items.length).toEqual(1);
     expect(itemAddedToCart).toBe(true);
     expect(service.find(cartId).items.length).toEqual(2);
 
@@ -78,20 +81,28 @@ describe('Given `CartsService`', () => {
       ...itemAddToCart,
       id: 'dd'
     };
-    service.itemAddToCart(addItemToRemove, cartId)
+    service.itemAddToCart(addItemToRemove, cartId);
     expect(service.find(cartId).items.length).toEqual(3);
     expect(service.itemRemoveFromCart('dd', cartId)).toEqual(true);
     expect(service.find(cartId).items.length).toEqual(2);
   })
 
   it('`checkout` method should calculate products in the cart', async () => {
-    //console.log(await service.checkout(cartId), cartB);
-    // expect().toEqual({
-    //   ...cartB,
-    //   total: (cartB.items[0].quantity * cartB.items[0].price) + (cartB.items[1].quantity * cartB.items[1].price)
+    await service.checkout(cartId);
+    let checkoutCart = service.find(cartId);
+    expect(checkoutCart.total).toEqual(414.28);
 
-    // })
+    service.itemAddToCart(itemAddToCart, cartId);
+    await service.checkout(cartId);
+    checkoutCart = service.find(cartId);
+    expect(checkoutCart.total).toEqual(414.28 + (itemAddToCart.price * itemAddToCart.quantity));
+
+    service.itemRemoveFromCart(itemAddToCart.id, cartId);
+    await service.checkout(cartId);
+    checkoutCart = service.find(cartId);
+    expect(checkoutCart.total).toEqual(414.28);
   })
+
 
   let lastHit: number = 0;
   it('`checkout` method with given currency `PLN` should get currencies from api and calculate products in the cart for `PLN` currency', async () => {
