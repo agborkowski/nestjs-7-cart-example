@@ -88,18 +88,15 @@ describe('Given `CartsService`', () => {
   })
 
   it('`checkout` method should calculate products in the cart', async () => {
-    await service.checkout(cartId);
-    let checkoutCart = service.find(cartId);
+    let checkoutCart = await service.checkout(cartId);
     expect(checkoutCart.total).toEqual(414.28);
 
     service.itemAddToCart(itemAddToCart, cartId);
-    await service.checkout(cartId);
-    checkoutCart = service.find(cartId);
+    checkoutCart = await service.checkout(cartId);
     expect(checkoutCart.total).toEqual(414.28 + (itemAddToCart.price * itemAddToCart.quantity));
 
     service.itemRemoveFromCart(itemAddToCart.id, cartId);
-    await service.checkout(cartId);
-    checkoutCart = service.find(cartId);
+    checkoutCart = await service.checkout(cartId);
     expect(checkoutCart.total).toEqual(414.28);
   })
 
@@ -113,18 +110,24 @@ describe('Given `CartsService`', () => {
     await service.checkout(cartB.id, 'PLN');
     expect(service.getExchangeRates()?.timestamp).toBeDefined();
     lastHit = service.getExchangeRates()?.timestamp;
-    const checkoutCart = await service.checkout(cartB.id, 'PLN');
-    expect(lastHit === service.getExchangeRates()?.timestamp).toBe(true);
-    ////console.log('cartBTotalInBaseCurrency KLKURWKHKJLSHKFJDASKJFKJASHFKLJ', cartBTotalInBaseCurrency);
-    // check
-    //expect(cartBTotalInBaseCurrency === checkoutCart).toBe(false);
 
+    const checkoutCartPln = await service.checkout(cartB.id, 'PLN');
+    expect(checkoutCartPln.total).toBeGreaterThan(0);
+    expect(lastHit === service.getExchangeRates()?.timestamp).toBe(true);
+    const checkoutCartCad = await service.checkout(cartB.id, 'CAD');
+    expect(checkoutCartCad.total).toBeGreaterThan(0);
+    expect(checkoutCartCad.total === checkoutCartPln.total).toBe(false);
   })
 
   it('`checkExchangeRates` with given uncached date should refresh exchange rates by hit to api', async () => {
-    //console.log('lastHit', lastHit);
-    await service.checkExchangeRates(new Date(0), 'PLN')
-    //console.log('new hit', service.getExchangeRates()?.timestamp);
+    await service.checkExchangeRates(new Date(0), 'PLN');
     expect(lastHit === service.getExchangeRates()?.timestamp).toBe(false);
+  })
+
+  it('`checkExchangeRates` with given base currency and `PLN` and `CAD` method should return different rates`', async () => {
+    expect(await service.checkExchangeRates(new Date(), 'EUR')).toBe(1);
+    const plnRate = await service.checkExchangeRates(new Date(), 'PLN');
+    const cadRate = await service.checkExchangeRates(new Date(), 'CAD');
+    expect(plnRate === cadRate).toBe(false);
   })
 });

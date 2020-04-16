@@ -34,7 +34,7 @@ export class CartsService {
     }
 
     find(id: string): any {
-        return this.carts.find((cart: Cart) => cart.id === id);
+        return { ... this.carts.find((cart: Cart) => cart.id === id) };
     }
 
     findAll(): Cart[] {
@@ -42,7 +42,7 @@ export class CartsService {
     }
 
     itemAddToCart(item: CartItem, cartId: string): Cart | boolean {
-        const cart = this.find(cartId);
+        const cart: Cart = this.find(cartId);
         if (cart) {
             cart.items.push(item);
             return true;
@@ -52,7 +52,7 @@ export class CartsService {
     }
 
     itemRemoveFromCart(itemId: string, cartId: string): Cart | boolean {
-        const cart = this.find(cartId);
+        const cart: Cart = this.find(cartId);
         if (cart) {
             const cartItemIndex = cart.items.findIndex((cartItem: CartItem) => cartItem.id === itemId)
             if (cartItemIndex !== -1) {
@@ -64,22 +64,19 @@ export class CartsService {
         return false;
     }
 
-    async checkout(cartId: string, currency: string = this.baseCurrency): Promise<CartCheckout | boolean> {
-        const cart = this.find(cartId);
+    async checkout(cartId: string, currency: string = this.baseCurrency): Promise<CartCheckout> {
+        const cart: CartCheckout = this.find(cartId);
         let currencyRate = await this.checkExchangeRates(new Date(), currency);
 
-        if (cart) {
-            cart.total = cart.items.reduce(
-                (sum, cartItem: CartItem) =>
-                    (sum + (cartItem.price * cartItem.quantity)) * currencyRate
-                , 0)
+        cart.total = cart.items.reduce(
+            (sum, cartItem: CartItem) =>
+                (sum + (cartItem.price * cartItem.quantity)) * currencyRate
+            , 0)
 
-            return cart;
-        }
-        return false;
+        return cart;
     }
 
-    public async checkExchangeRates(date: Date = new Date(), currency = ''): Promise<number> {
+    public async checkExchangeRates(date: Date, currency = ''): Promise<number> {
         const checkDate = date.setHours(0, 0, 0, 0);
         let currencyRate = 1;
 

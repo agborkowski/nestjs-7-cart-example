@@ -12,5 +12,5 @@ export interface Cart {
 }
 
 export interface CartCheckout extends Cart {
-    readonly total: number
+    total: number
 }
