@@ -1,5 +1,6 @@
 export interface CartItem {
     readonly id: string
+    readonly cartId: string
     readonly name: string
     readonly price: number
     readonly quantity: number

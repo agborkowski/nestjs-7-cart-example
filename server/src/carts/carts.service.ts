@@ -1,6 +1,5 @@
 import { Injectable, OnModuleInit, HttpService } from '@nestjs/common';
 import { Cart, CartCheckout, CartItem } from './cart.interface';
-//import { AxiosResponse } from 'axios';
 
 interface ExchangeRates {
     rates: object
@@ -14,6 +13,7 @@ export class CartsService {
         id: 'a',
         items: [{
             id: 'aa',
+            cartId: 'a',
             name: 'test',
             price: 100.32,
             quantity: 2,
@@ -29,8 +29,12 @@ export class CartsService {
     constructor(private httpService: HttpService) { }
 
     create(cart: Cart): boolean {
-        this.carts.push(cart);
-        return true;
+        const findExistsCart = this.find(cart.id);
+        if (findExistsCart?.id !== cart.id) {
+            this.carts.push(cart);
+            return true;
+        }
+        return false;
     }
 
     find(id: string): any {
@@ -44,8 +48,11 @@ export class CartsService {
     itemAddToCart(item: CartItem, cartId: string): Cart | boolean {
         const cart: Cart = this.find(cartId);
         if (cart) {
-            cart.items.push(item);
-            return true;
+            const cartItemIndex = cart.items.findIndex((cartItem: CartItem) => cartItem.id === item.id)
+            if (cartItemIndex === -1) {
+                cart.items.push(item);
+                return true;
+            }
         }
         return false;
 

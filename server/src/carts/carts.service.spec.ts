@@ -10,6 +10,7 @@ describe('Given `CartsService`', () => {
     id: 'a',
     items: [{
       id: 'aa',
+      cartId: 'a',
       name: 'test',
       price: 100.32,
       quantity: 2,
@@ -21,6 +22,7 @@ describe('Given `CartsService`', () => {
     id: 'b',
     items: [{
       id: 'bb',
+      cartId: 'b',
       name: 'test item of b cart',
       price: 103.32,
       quantity: 3,
@@ -48,7 +50,15 @@ describe('Given `CartsService`', () => {
   const cartId: string = sampleCartB.id;
 
   it('`create` method with given `sampleCartB` should return 2 carts', () => {
-    service.create(JSON.parse(JSON.stringify(sampleCartB)));
+    const create = service.create(JSON.parse(JSON.stringify(sampleCartB)));
+    expect(create).toBe(true);
+    expect(service.findAll().length).toEqual(2);
+    expect(service.findAll()).toEqual([sampleCartA, sampleCartB]);
+  })
+
+  it('`create` method with given duplicated `sampleCartB` should return 2 carts', () => {
+    const create = service.create(JSON.parse(JSON.stringify(sampleCartB)));
+    expect(create).toBe(false);
     expect(service.findAll().length).toEqual(2);
     expect(service.findAll()).toEqual([sampleCartA, sampleCartB]);
   })
@@ -59,8 +69,9 @@ describe('Given `CartsService`', () => {
     expect(service.find(cartId).items === sampleCartB.items).toEqual(false); // is there side effect (shallow copy)
   })
 
-  const itemAddToCart: CartItem = {
+  const itemAddToCartB: CartItem = {
     id: 'cc',
+    cartId: 'b',
     name: 'testc',
     price: 104.32,
     quantity: 1,
@@ -68,7 +79,7 @@ describe('Given `CartsService`', () => {
   };
 
   it('`itemAddToCart` method should add item to exists `b` cart', () => {
-    const itemAddedToCart = service.itemAddToCart(itemAddToCart, cartId);
+    const itemAddedToCart = service.itemAddToCart(itemAddToCartB, cartId);
     expect(service.find(cartId) === sampleCartB).toEqual(false); // is there side effect
     expect(sampleCartB.items.length).toEqual(1);
     expect(itemAddedToCart).toBe(true);
@@ -78,7 +89,7 @@ describe('Given `CartsService`', () => {
 
   it('`itemRemoveFromCart` method should remove item from exists `b` cart', () => {
     const addItemToRemove = {
-      ...itemAddToCart,
+      ...itemAddToCartB,
       id: 'dd'
     };
     service.itemAddToCart(addItemToRemove, cartId);
@@ -89,13 +100,16 @@ describe('Given `CartsService`', () => {
 
   it('`checkout` method should calculate products in the cart', async () => {
     let checkoutCart = await service.checkout(cartId);
+    expect(service.find(cartId).items.length).toEqual(2);
     expect(checkoutCart.total).toEqual(414.28);
 
-    service.itemAddToCart(itemAddToCart, cartId);
-    checkoutCart = await service.checkout(cartId);
-    expect(checkoutCart.total).toEqual(414.28 + (itemAddToCart.price * itemAddToCart.quantity));
+    service.itemAddToCart({ ...itemAddToCartB, id: 'c' }, cartId);
+    expect(service.find(cartId).items.length).toEqual(3);
 
-    service.itemRemoveFromCart(itemAddToCart.id, cartId);
+    checkoutCart = await service.checkout(cartId);
+    expect(checkoutCart.total).toEqual(414.28 + (itemAddToCartB.price * itemAddToCartB.quantity));
+
+    service.itemRemoveFromCart(itemAddToCartB.id, cartId);
     checkoutCart = await service.checkout(cartId);
     expect(checkoutCart.total).toEqual(414.28);
   })

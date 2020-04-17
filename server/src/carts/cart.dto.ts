@@ -4,7 +4,7 @@ export interface CartDto {
 }
 
 export interface CartItemDto {
-    cart_id: string
+    cartId: string
     id: string
     name: string
     price: number

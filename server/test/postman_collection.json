@@ -1,0 +1,563 @@
+{
+	"info": {
+		"_postman_id": "121c2a86-25b7-4737-bca6-ba9eb6b2a39b",
+		"name": "Cart",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get all carts",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/carts",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"carts"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Get all carts",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/carts",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"carts"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "120"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"78-6hfr/qlDmoaMuicaIXOlFTmmBOk\""
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 17 Apr 2020 12:30:42 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						}
+					],
+					"cookie": [],
+					"body": "[\n    {\n        \"id\": \"a\",\n        \"items\": [\n            {\n                \"id\": \"aa\",\n                \"cartId\": \"a\",\n                \"name\": \"test\",\n                \"price\": 100.32,\n                \"quantity\": 2,\n                \"description\": \"test cart item\"\n            }\n        ]\n    }\n]"
+				}
+			]
+		},
+		{
+			"name": "Create `id:c` cart",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": \"c\",\n    \"items\": [\n        {\n            \"id\": \"ac\",\n            \"cartId\": \"c\",\n            \"name\": \"test\",\n            \"price\": 100.32,\n            \"quantity\": 2,\n            \"description\": \"test cart item\"\n        }\n    ]\n}"
+				},
+				"url": {
+					"raw": "http://localhost:3000/carts",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"carts"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Create `id:c` cart",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": \"c\",\n    \"items\": [\n        {\n            \"id\": \"ac\",\n            \"cartId\": \"c\",\n            \"name\": \"test\",\n            \"price\": 100.32,\n            \"quantity\": 2,\n            \"description\": \"test cart item\"\n        }\n    ]\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3000/carts",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"carts"
+							]
+						}
+					},
+					"status": "Created",
+					"code": 201,
+					"_postman_previewlanguage": "plain",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 17 Apr 2020 12:54:33 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Content-Length",
+							"value": "0"
+						}
+					],
+					"cookie": [],
+					"body": null
+				}
+			]
+		},
+		{
+			"name": "Get a single cart `id:c`",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/carts/c",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"carts",
+						"c"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Get a single cart `id:c`",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/carts/c",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"carts",
+								"c"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "118"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"76-gF98zHdu7IgUCEzgHDOXCETTHmM\""
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 17 Apr 2020 12:24:54 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"id\": \"c\",\n    \"items\": [\n        {\n            \"id\": \"ac\",\n            \"cartId\": \"c\",\n            \"name\": \"test\",\n            \"price\": 100.32,\n            \"quantity\": 2,\n            \"description\": \"test cart item\"\n        }\n    ]\n}"
+				}
+			]
+		},
+		{
+			"name": "Add item to cart `id:c`",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"cartId\": \"c\",\n\t\"id\": \"ac2\",\n\t\"name\": \"test2\",\n\t\"price\": 100.32,\n\t\"quantity\": 2,\n\t\"description\": \"test cart item\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:3000/carts/item",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"carts",
+						"item"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Add item to cart `id:c`",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"cartId\": \"c\",\n\t\"id\": \"ac2\",\n\t\"name\": \"test2\",\n\t\"price\": 100.32,\n\t\"quantity\": 2,\n\t\"description\": \"test cart item\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3000/carts/item",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"carts",
+								"item"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "plain",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 17 Apr 2020 12:58:49 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Content-Length",
+							"value": "0"
+						}
+					],
+					"cookie": [],
+					"body": null
+				}
+			]
+		},
+		{
+			"name": "Checkout cart `id:c` in `EUR`",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/carts/checkout/a/currency/EUR",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"carts",
+						"checkout",
+						"a",
+						"currency",
+						"EUR"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Checkout cart `id:c` in `EUR`",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/carts/checkout/a/currency/EUR",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"carts",
+								"checkout",
+								"a",
+								"currency",
+								"EUR"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "133"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"85-1hAY2NXZQy6iExpozI/6MMnS8V4\""
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 17 Apr 2020 12:56:16 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"id\": \"a\",\n    \"items\": [\n        {\n            \"id\": \"aa\",\n            \"cartId\": \"a\",\n            \"name\": \"test\",\n            \"price\": 100.32,\n            \"quantity\": 2,\n            \"description\": \"test cart item\"\n        }\n    ],\n    \"total\": 200.64\n}"
+				}
+			]
+		},
+		{
+			"name": "Checkout cart `id:c` in `PLN` currency",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/carts/checkout/c",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"carts",
+						"checkout",
+						"c"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Checkout cart `id:c` in `PLN` currency",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/carts/checkout/c/currency/PLN",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"carts",
+								"checkout",
+								"c",
+								"currency",
+								"PLN"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "144"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"90-Rw3GzTAvXubZEJTu9Ad3oV2CqDE\""
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 17 Apr 2020 12:55:54 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"id\": \"c\",\n    \"items\": [\n        {\n            \"id\": \"ac\",\n            \"cartId\": \"c\",\n            \"name\": \"test\",\n            \"price\": 100.32,\n            \"quantity\": 2,\n            \"description\": \"test cart item\"\n        }\n    ],\n    \"total\": 908.6584320000001\n}"
+				}
+			]
+		},
+		{
+			"name": "delete item `ac2` from cart `id:c`",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\"cartId\": \"c\",\n\"itemId\": \"ac2\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:3000/carts/item",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"carts",
+						"item"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": null,
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "delete item `ac2` from cart `id:c`",
+					"originalRequest": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\"cartId\": \"c\",\n\"itemId\": \"ac2\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3000/carts/item",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"carts",
+								"item"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "plain",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 17 Apr 2020 12:59:12 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Content-Length",
+							"value": "0"
+						}
+					],
+					"cookie": [],
+					"body": null
+				}
+			]
+		}
+	],
+	"protocolProfileBehavior": {}
+}

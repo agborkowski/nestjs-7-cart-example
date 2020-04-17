@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Post, Body, Put, Delete } from '@nestjs/common';
+import { Controller, Get, Param, Post, Body, Delete, Put, BadRequestException } from '@nestjs/common';
 import { CartsService } from './carts.service';
 import { Cart } from './cart.interface';
 import { CartDto, CartItemDto, CartItemDeleteDto } from './cart.dto';
@@ -10,38 +10,38 @@ export class CartsController {
 
     @Get()
     carts(): Cart[] {
-        console.log('carts');
         return this.cartsService.findAll();
     }
 
     @Get(':id')
     cart(@Param() params) {
-        console.log('get a single cart', params.id);
         return this.cartsService.find(params.id);
     }
 
-    @Get('checkout/:id')
+    @Get('checkout/:id/currency/:currency')
     checkout(@Param() params) {
-        console.log('checkout cart', params.id);
-        return this.cartsService.checkout(params.id);
+        return this.cartsService.checkout(params.id, params?.currency);
     }
 
     @Post()
     cartCreate(@Body() cart: CartDto) {
-        console.log('cartCreate', cart);
-        this.cartsService.create(cart);
+        if (!this.cartsService.create(cart)) {
+            throw new BadRequestException();
+        }
     }
 
-    @Post()
+    @Put('item')
     itemAddToCart(@Body() cartItem: CartItemDto) {
-        console.log('itemAddToCart', cartItem);
-        this.cartsService.itemAddToCart(cartItem, cartItem.cart_id);
+        if (!this.cartsService.itemAddToCart(cartItem, cartItem.cartId)) {
+            throw new BadRequestException();
+        }
     }
 
-    @Delete()
+    @Delete('item')
     itemRemoveFromCart(@Body() cartItemDeleteDto: CartItemDeleteDto) {
-        console.log('itemRemoveFromCart', cartItemDeleteDto);
         const { itemId, cartId } = cartItemDeleteDto;
-        this.cartsService.itemRemoveFromCart(itemId, cartId);
+        if (!this.cartsService.itemRemoveFromCart(itemId, cartId)) {
+            throw new BadRequestException();
+        }
     }
 }
