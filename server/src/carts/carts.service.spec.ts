@@ -30,7 +30,7 @@ describe('Given `CartsService`', () => {
 
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [HttpModule], // @improvements mock it ;)
+      imports: [HttpModule], // @improvements can be mocked
       providers: [CartsService],
     }).compile();
 
