@@ -6,7 +6,7 @@ import { HttpModule } from '@nestjs/common';
 describe('Given `CartsService`', () => {
   let service: CartsService;
 
-  const cartA: Cart = {
+  const sampleCartA: Cart = {
     id: 'a',
     items: [{
       id: 'aa',
@@ -17,7 +17,7 @@ describe('Given `CartsService`', () => {
     }]
   };
 
-  const cartB: Cart = {
+  const sampleCartB: Cart = {
     id: 'b',
     items: [{
       id: 'bb',
@@ -42,21 +42,21 @@ describe('Given `CartsService`', () => {
   });
 
   it('`findAll` method should return initial carts array', () => {
-    expect(service.findAll()).toEqual([cartA])
+    expect(service.findAll()).toEqual([sampleCartA])
   })
 
-  const cartId: string = cartB.id;
+  const cartId: string = sampleCartB.id;
 
-  it('`create` method with given `cartB` should return 2 carts', () => {
-    service.create(JSON.parse(JSON.stringify(cartB)));
+  it('`create` method with given `sampleCartB` should return 2 carts', () => {
+    service.create(JSON.parse(JSON.stringify(sampleCartB)));
     expect(service.findAll().length).toEqual(2);
-    expect(service.findAll()).toEqual([cartA, cartB]);
+    expect(service.findAll()).toEqual([sampleCartA, sampleCartB]);
   })
 
   it('`find` method with given cart id should return that cart', () => {
-    expect(service.find(cartId)).toEqual(cartB);
-    expect(service.find(cartId) === cartB).toEqual(false); // is there side effect
-    expect(service.find(cartId).items === cartB.items).toEqual(false); // is there side effect
+    expect(service.find(cartId)).toEqual(sampleCartB);
+    expect(service.find(cartId) === sampleCartB).toEqual(false); // is there side effect
+    expect(service.find(cartId).items === sampleCartB.items).toEqual(false); // is there side effect (shallow copy)
   })
 
   const itemAddToCart: CartItem = {
@@ -69,8 +69,8 @@ describe('Given `CartsService`', () => {
 
   it('`itemAddToCart` method should add item to exists `b` cart', () => {
     const itemAddedToCart = service.itemAddToCart(itemAddToCart, cartId);
-    expect(service.find(cartId) === cartB).toEqual(false); // is there side effect
-    expect(cartB.items.length).toEqual(1);
+    expect(service.find(cartId) === sampleCartB).toEqual(false); // is there side effect
+    expect(sampleCartB.items.length).toEqual(1);
     expect(itemAddedToCart).toBe(true);
     expect(service.find(cartId).items.length).toEqual(2);
 
@@ -105,16 +105,16 @@ describe('Given `CartsService`', () => {
   it('`checkout` method with given currency `PLN` should get currencies from api and calculate products in the cart for `PLN` currency', async () => {
     // @improvements exclude it
     expect(service.getExchangeRates()?.timestamp).not.toBeDefined();
-    await service.checkout(cartB.id, 'PLN');
+    await service.checkout(sampleCartB.id, 'PLN');
     expect(service.getExchangeRates().rates['PLN']).toBeDefined();
-    await service.checkout(cartB.id, 'PLN');
+    await service.checkout(sampleCartB.id, 'PLN');
     expect(service.getExchangeRates()?.timestamp).toBeDefined();
     lastHit = service.getExchangeRates()?.timestamp;
 
-    const checkoutCartPln = await service.checkout(cartB.id, 'PLN');
+    const checkoutCartPln = await service.checkout(sampleCartB.id, 'PLN');
     expect(checkoutCartPln.total).toBeGreaterThan(0);
     expect(lastHit === service.getExchangeRates()?.timestamp).toBe(true);
-    const checkoutCartCad = await service.checkout(cartB.id, 'CAD');
+    const checkoutCartCad = await service.checkout(sampleCartB.id, 'CAD');
     expect(checkoutCartCad.total).toBeGreaterThan(0);
     expect(checkoutCartCad.total === checkoutCartPln.total).toBe(false);
   })
