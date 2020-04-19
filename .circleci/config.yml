@@ -1,4 +1,20 @@
-version: 2.1
+version: 2
+aliases:
+  - &restore-cache
+    restore_cache:
+        key: dependency-cache-{{ checksum "package.json" }}
+  - &install-deps
+    run:
+        name: Install dependencies
+        command: npm ci
+  - &build-packages
+    run:
+        name: Build
+        command: npm run build
+  - &run-unit-tests
+    run:
+        name: Test
+        command: npm run test
 docker:
   - image: circleci/node:12
 jobs:
